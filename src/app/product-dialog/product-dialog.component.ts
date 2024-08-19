@@ -1,15 +1,23 @@
 import { Component } from '@angular/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
+
+interface Category {
+  value: string;
+  viewValue: string;
+}
+
 
 @Component({
   selector: 'app-product-dialog',
   templateUrl: './product-dialog.component.html',
   styleUrls: ['./product-dialog.component.scss'],
-  standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatIconModule],
+
 })
 export class ProductDialogComponent {
+
+  categories: Category[] = [
+    {value: 'steak-0', viewValue: 'Steak'},
+    {value: 'pizza-1', viewValue: 'Pizza'},
+    {value: 'tacos-2', viewValue: 'Tacos'},
+  ];
 
 }
