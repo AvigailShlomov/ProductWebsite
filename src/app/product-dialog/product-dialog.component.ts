@@ -14,12 +14,14 @@ interface Category {
 })
 export class ProductDialogComponent {
 
-/** @todo: change this to valid ctegories */
+  /** @todo: change this to valid ctegories */
   categories: Category[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'},
+    { value: 'steak-0', viewValue: 'Steak' },
+    { value: 'pizza-1', viewValue: 'Pizza' },
+    { value: 'tacos-2', viewValue: 'Tacos' },
   ];
   /**@todo: add verfications to the Datepicker */
+
+  freshnessList: string[] = ["New", "Seconed Hand", "Reforbished"]
 
 }
