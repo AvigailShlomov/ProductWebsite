@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface Category {
   value: string;
@@ -14,14 +15,33 @@ interface Category {
 })
 export class ProductDialogComponent {
 
-  /** @todo: change this to valid ctegories */
+  /** @todo: change this to valid categories */
   categories: Category[] = [
-    { value: 'steak-0', viewValue: 'Steak' },
-    { value: 'pizza-1', viewValue: 'Pizza' },
-    { value: 'tacos-2', viewValue: 'Tacos' },
+    { value: 'Electronics-0', viewValue: 'Electronics' },
+    { value: 'Food-1', viewValue: 'Food' },
+    { value: 'pictures-2', viewValue: 'Pictures' },
   ];
   /**@todo: add verfications to the Datepicker */
 
-  freshnessList: string[] = ["New", "Seconed Hand", "Reforbished"]
+  freshnessList: string[] = ["New", "Seconed Hand", "Reforbished"];
+  productForm!: FormGroup;
+
+  constructor(private formBuilder: FormBuilder) { }
+
+  ngOnInit() {
+    this.productForm = this.formBuilder.group({
+      productName: ['', Validators.required],
+      category: ['', Validators.required],
+      freshness: ['', Validators.required],
+      price: ['', Validators.required],
+      comment: ['', Validators.required],
+      date: ['', Validators.required],
+    })
+  }
+
+  addProduct(){
+    console.log(this.productForm.value);
+  }
+
 
 }
