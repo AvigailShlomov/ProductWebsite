@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ApiService } from '../services/api.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 interface Category {
   value: string;
@@ -24,11 +26,25 @@ export class ProductDialogComponent {
   /**@todo: add verfications to the Datepicker */
 
   freshnessList: string[] = ["New", "Seconed Hand", "Reforbished"];
-  productForm!: FormGroup;
+  productForm: FormGroup = this.formBuilder.group({
+    productName: ['', Validators.required],
+    category: ['', Validators.required],
+    freshness: ['', Validators.required],
+    price: ['', Validators.required],
+    comment: ['', Validators.required],
+    date: ['', Validators.required],
+  });
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+    private api: ApiService,
+    private dialogRef: MatDialogRef<ProductDialogComponent>
+  ) { }
 
   ngOnInit() {
+    this.initForm()
+  }
+  
+  initForm() {
     this.productForm = this.formBuilder.group({
       productName: ['', Validators.required],
       category: ['', Validators.required],
@@ -39,8 +55,22 @@ export class ProductDialogComponent {
     })
   }
 
-  addProduct(){
-    console.log(this.productForm.value);
+  addProduct() {
+    if (this.productForm.valid) {
+      this.api.postProduct(this.productForm.value)
+        .subscribe({
+          next: ((res) => {
+            this.productForm.reset();
+            this.dialogRef.close('save')
+            alert("Product added sucssesfuly");
+          }),
+          error: () => {
+            alert("error wile adding the new product")
+          }
+
+        })
+    }
+
   }
 
 
