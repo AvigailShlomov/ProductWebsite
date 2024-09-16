@@ -13,7 +13,7 @@ postProduct(data: any) : Observable<any>{
   return this.http.post<any>("http://localhost:3000/productList/", data);
 }
 getProduct(): Observable<any>{
-  return this.http.get<any>("http://localhost:3000/productList")
+  return this.http.get<any>("http://localhost:3000/productList/")
 }
 
 }
