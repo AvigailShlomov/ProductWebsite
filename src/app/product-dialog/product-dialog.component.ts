@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../services/api.service';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -15,7 +15,7 @@ interface Category {
   styleUrls: ['./product-dialog.component.scss'],
 
 })
-export class ProductDialogComponent {
+export class ProductDialogComponent implements OnInit {
 
   /** @todo: change this to valid categories */
   categories: Category[] = [
@@ -26,6 +26,7 @@ export class ProductDialogComponent {
   /**@todo: add verfications to the Datepicker */
 
   freshnessList: string[] = ["New", "Seconed Hand", "Reforbished"];
+
   productForm: FormGroup = this.formBuilder.group({
     productName: ['', Validators.required],
     category: ['', Validators.required],
@@ -41,7 +42,7 @@ export class ProductDialogComponent {
   ) { }
 
   ngOnInit() {
-    this.initForm()
+    // this.initForm()
   }
   
   initForm() {
