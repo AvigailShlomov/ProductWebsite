@@ -1,15 +1,3 @@
-
-export enum Category {
-    Electronics,
-    Food,
-    Pictures
-}
-
-export enum Freshness {
-    New,
-    Seconed_Hand,
-    Reforbished
-}
 export interface DropDownStruct {
     value: string;
     viewValue: string;
@@ -23,4 +11,16 @@ export interface Product {
     price: number,
     date: string,
     comment: string,
+}
+
+export class Freshness{
+    public static NEW='New';
+    public static SECONED_HAND='Seconed Hand';
+    public static REFORBISHED='Reforbished';
+}
+
+export class Category{
+    public static ELECTRONICS='Electronics';
+    public static FOOD='Food';
+    public static PICTURES='Pictures';
 }

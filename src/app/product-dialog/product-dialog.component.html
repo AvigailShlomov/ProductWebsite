@@ -9,8 +9,8 @@
         <mat-form-field appearance="outline">
             <mat-label>Product Category</mat-label>
             <mat-select formControlName="category" placeholder="Product Category">
-                <mat-option *ngFor="let category of categories"
-                    [value]="category.viewValue">{{category.viewValue}}</mat-option>
+                <mat-option *ngFor="let category of categories" [value]="category">
+                    {{category}}</mat-option>
             </mat-select>
         </mat-form-field>
 
@@ -23,9 +23,7 @@
 
         <mat-label>Product Freshness</mat-label>
         <mat-radio-group formControlName="freshness" class="example-radio-group" aria-label="Select an option">
-            <mat-radio-button *ngFor="let fresh of freshnessList" 
-                              class="example-radio-button"
-                              [value]="fresh">
+            <mat-radio-button *ngFor="let fresh of freshnessList" class="example-radio-button" [value]="fresh">
                 {{fresh}}
             </mat-radio-button>
         </mat-radio-group>

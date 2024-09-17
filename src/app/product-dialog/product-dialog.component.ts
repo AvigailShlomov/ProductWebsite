@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../services/api.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DropDownStruct, Product } from '../Modals/app-modals';
+import { Category, Freshness, Product } from '../Modals/app-modals';
 
 
 
@@ -15,14 +15,9 @@ import { DropDownStruct, Product } from '../Modals/app-modals';
 })
 export class ProductDialogComponent implements OnInit {
 
-  /** @todo: change this to valid categories */
-  categories: DropDownStruct[] = [
-    { value: 'Electronics-0', viewValue: 'Electronics' },
-    { value: 'Food-1', viewValue: 'Food' },
-    { value: 'pictures-2', viewValue: 'Pictures' },
-  ];
   /**@todo: add verfications to the Datepicker */
-  freshnessList: string[] = ["New", "Seconed Hand", "Reforbished"];
+  categories: Category[] = [Category.ELECTRONICS, Category.FOOD, Category.PICTURES];
+  freshnessList: Freshness[] = [Freshness.NEW, Freshness.SECONED_HAND, Freshness.REFORBISHED];
   productForm: FormGroup = this.formBuilder.group({
     productName: ['', Validators.required],
     category: ['', Validators.required],
@@ -40,7 +35,6 @@ export class ProductDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.initForm()
     if (this.editData) {
 
       this.buttonAction = "Update";
@@ -53,16 +47,6 @@ export class ProductDialogComponent implements OnInit {
     }
   }
 
-  initForm() {
-    this.productForm = this.formBuilder.group({
-      productName: ['', Validators.required],
-      category: ['', Validators.required],
-      freshness: ['', Validators.required],
-      price: ['', Validators.required],
-      date: ['', Validators.required],
-      comment: ['', Validators.required]
-    })
-  }
 
   addProduct() {
 
