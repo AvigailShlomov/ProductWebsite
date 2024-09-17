@@ -12,7 +12,7 @@ import { MatSort } from '@angular/material/sort';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  displayedColumns: string[] = ['productName', 'category', 'freshness', 'price', 'date', 'comment'];
+  displayedColumns: string[] = ['productName', 'category', 'freshness', 'price', 'date', 'comment', 'actions'];
   dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -36,7 +36,6 @@ export class AppComponent implements OnInit {
     }
   }
 
-
   openDialog() {
     this.dialog.open(ProductDialogComponent, {
       width: '30%'
@@ -47,14 +46,28 @@ export class AppComponent implements OnInit {
     this.http.getProduct()
       .subscribe({
         next: (res) => {
-          this.dataSource = res;
-          console.log("product List: ", res);
+          this.dataSource = new MatTableDataSource(res);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+
         },
         error: (error) => {
-          alert("err whle fetching products");
+          alert("err while fetching products");
           console.log("get products error: ", error);
 
         }
       })
+  }
+
+  editProduct(product: any) {
+    this.dialog.open(ProductDialogComponent, {
+      width: '30%',
+      data: product
+    });
+    console.log("product ",product);
+  }
+
+  deleteProduct() {
+
   }
 }
