@@ -1,13 +1,23 @@
 {
-    "productList": [],
-    "comments": [
-        {
-            "id": "",
-            "body": "some comment",
-            "postId": 1
-        }
-    ],
-    "profile": {
-        "name": "Avi Avrumi"
+  "productList": [
+    {
+      "productName": "Apple Notebook",
+      "category": "Electronics",
+      "freshness": "Reforbished",
+      "price": 7250,
+      "comment": "works perfectly",
+      "date": "2024-09-23T21:00:00.000Z",
+      "id": "3f98"
     }
+  ],
+  "comments": [
+    {
+      "id": "",
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "Avi Avrumi"
+  }
 }

@@ -38,7 +38,8 @@ export class AppComponent implements OnInit {
 
   openDialog() {
     this.dialog.open(ProductDialogComponent, {
-      width: '30%'
+      width: '30%',
+      height:'85%'
     }).afterClosed()
       .subscribe(val => {
         if (val == 'save') {
