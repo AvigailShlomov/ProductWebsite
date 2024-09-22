@@ -39,7 +39,12 @@ export class AppComponent implements OnInit {
   openDialog() {
     this.dialog.open(ProductDialogComponent, {
       width: '30%'
-    });
+    }).afterClosed()
+      .subscribe(val => {
+        if (val == 'save') {
+          this.getAllProducts();
+        }
+      })
   }
 
   getAllProducts() {
@@ -63,11 +68,25 @@ export class AppComponent implements OnInit {
     this.dialog.open(ProductDialogComponent, {
       width: '30%',
       data: product
-    });
-    console.log("product ",product);
+    }).afterClosed()
+      .subscribe(val => {
+        if (val == 'update') {
+          this.getAllProducts();
+        }
+      })
+    console.log("product ", product);
   }
 
-  deleteProduct() {
-
+  deleteProduct(id: string) { // should be a number
+    this.http.deleteProduct(id)
+      .subscribe({
+        next: (res) => {
+          alert("delete sucsses");
+          this.getAllProducts();
+        },
+        error: (res) => {
+          alert("error while deleting");
+        }
+      })
   }
 }

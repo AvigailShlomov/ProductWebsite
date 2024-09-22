@@ -75,7 +75,7 @@ export class ProductDialogComponent implements OnInit {
       .subscribe({
         next: ((res) => {
           this.productForm.reset();
-          this.dialogRef.close('save')
+          this.dialogRef.close('update')
           alert("Product updated sucssesfuly");
         }),
         error: () => {
