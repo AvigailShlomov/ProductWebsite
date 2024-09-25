@@ -1,15 +1,39 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ProductDialogComponent } from './product-dialog/product-dialog.component';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ApiService } from './services/api.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
+import { HttpClientModule } from '@angular/common/http';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ProductDialogComponent } from './product-dialog/product-dialog.component';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [
+    ProductDialogComponent,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    CommonModule,
+    MatDialogModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    HttpClientModule
+  ]
 })
 export class AppComponent implements OnInit {
   displayedColumns: string[] = ['productName', 'category', 'freshness', 'price', 'date', 'comment', 'actions'];
@@ -39,7 +63,7 @@ export class AppComponent implements OnInit {
   openDialog() {
     this.dialog.open(ProductDialogComponent, {
       width: '30%',
-      height:'85%'
+      height: '85%'
     }).afterClosed()
       .subscribe(val => {
         if (val == 'save') {

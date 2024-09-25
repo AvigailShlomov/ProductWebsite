@@ -1,17 +1,28 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../services/api.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { Category, Freshness, Product } from '../Modals/app-modals';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 
-
-
-/**@todo: make this a standalone comp */
 @Component({
   selector: 'app-product-dialog',
   templateUrl: './product-dialog.component.html',
   styleUrls: ['./product-dialog.component.scss'],
-
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatRadioModule]
 })
 export class ProductDialogComponent implements OnInit {
 
@@ -71,7 +82,7 @@ export class ProductDialogComponent implements OnInit {
   }
 
   updateProduct() {
-    this.api.putProduct(this.productForm.value,this.editData.id)
+    this.api.putProduct(this.productForm.value, this.editData.id)
       .subscribe({
         next: ((res) => {
           this.productForm.reset();
