@@ -22,9 +22,9 @@ import { MatInputModule } from '@angular/material/input';
   imports: [
     ProductDialogComponent,
     ReactiveFormsModule,
+    CommonModule,
     MatFormFieldModule,
     MatInputModule,
-    CommonModule,
     MatDialogModule,
     MatToolbarModule,
     MatIconModule,

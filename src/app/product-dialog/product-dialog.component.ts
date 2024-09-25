@@ -9,6 +9,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-product-dialog',
@@ -22,7 +24,12 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatRadioModule]
+    MatRadioModule,
+    MatDialogModule,
+    MatRadioModule,
+    MatButtonModule,
+    NgFor
+  ]
 })
 export class ProductDialogComponent implements OnInit {
 
