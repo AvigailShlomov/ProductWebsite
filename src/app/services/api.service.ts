@@ -22,7 +22,7 @@ export class ApiService {
     return this.http.put<any>("http://localhost:3000/productList/" + id, data)
   }
 
-  deleteProduct(id: string): Observable<any> {
+  deleteProduct(id: number): Observable<any> {
     console.log("update procut put method: ", id);
     return this.http.delete<any>("http://localhost:3000/productList/" + id)
   }
