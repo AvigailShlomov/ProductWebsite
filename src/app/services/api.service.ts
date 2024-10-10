@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { API_URL} from '../Modals/app-modals';
 
 @Injectable({
   providedIn: 'root'
@@ -10,20 +11,18 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   postProduct(data: any): Observable<any> {
-    return this.http.post<any>("http://localhost:3000/productList/", data);
+    return this.http.post<any>(API_URL, data);
   }
 
   getProduct(): Observable<any> {
-    return this.http.get<any>("http://localhost:3000/productList/")
+    return this.http.get<any>(API_URL)
   }
 
   putProduct(data: any, id: string): Observable<any> {
-    console.log("update procut put method: ", id);
-    return this.http.put<any>("http://localhost:3000/productList/" + id, data)
+    return this.http.put<any>(API_URL + id, data)
   }
 
   deleteProduct(id: number): Observable<any> {
-    console.log("update procut put method: ", id);
-    return this.http.delete<any>("http://localhost:3000/productList/" + id)
+    return this.http.delete<any>(API_URL + id)
   }
 }
