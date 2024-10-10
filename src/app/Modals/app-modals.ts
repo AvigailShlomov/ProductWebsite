@@ -24,3 +24,5 @@ export class Category{
     public static FOOD='Food';
     public static PICTURES='Pictures';
 }
+
+export const API_URL="http://localhost:3000/productList/";
