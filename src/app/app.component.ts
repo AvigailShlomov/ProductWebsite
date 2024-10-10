@@ -11,8 +11,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ProductDialogComponent } from './product-dialog/product-dialog.component';
+import { ProductDialogComponent } from './Dialogs/product-dialog/product-dialog.component';
 import { MatInputModule } from '@angular/material/input';
+import { ServerMassageDialogComponent } from './Dialogs/server-massage-dialog/server-massage-dialog/server-massage-dialog.component';
+import { catchError, Observable, of } from 'rxjs';
+import { Product } from './Modals/app-modals';
 
 @Component({
   selector: 'app-root',
@@ -36,11 +39,13 @@ import { MatInputModule } from '@angular/material/input';
   ]
 })
 export class AppComponent implements OnInit {
+  /**@todo: create constans for the column headlines */
   displayedColumns: string[] = ['productName', 'category', 'freshness', 'price', 'date', 'comment', 'actions'];
-  dataSource = new MatTableDataSource<any>();
-
+  
+  //dataSource = new MatTableDataSource<Observable<Product[]>>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  products$!: Observable<Product[]>;
 
   constructor(
     private dialog: MatDialog,
@@ -48,16 +53,16 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAllProducts();
+    this.products$ = this.getAllProducts();
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    // const filterValue = (event.target as HTMLInputElement).value;
+    // this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
   }
 
   openDialog() {
@@ -67,26 +72,31 @@ export class AppComponent implements OnInit {
     }).afterClosed()
       .subscribe(val => {
         if (val == 'save') {
-          this.getAllProducts();
+          this.products$ = this.getAllProducts(); 
         }
       })
   }
 
+
   getAllProducts() {
-    this.http.getProduct()
-      .subscribe({
-        next: (res) => {
-          this.dataSource = new MatTableDataSource(res);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-
-        },
-        error: (error) => {
-          alert("err while fetching products");
-          console.log("get products error: ", error);
-
-        }
+    return this.http.getProduct().pipe(
+      catchError(err => {
+        alert("err while fetching products"); /**@todo: create pop Modal instead */
+        return of([]);
       })
+    );
+/**@todo: take care of sort and v and del this */
+    // this.http.getProduct() 
+    //   .subscribe({
+    //     next: (res) => {
+       //  this.dataSource = new MatTableDataSource(res);
+    //       this.dataSource.paginator = this.paginator;
+    //       this.dataSource.sort = this.sort;
+    //     },
+    //     error: (error) => {
+    //       
+    //     }
+    //   })
   }
 
   editProduct(product: any) {
@@ -96,21 +106,24 @@ export class AppComponent implements OnInit {
     }).afterClosed()
       .subscribe(val => {
         if (val == 'update') {
-          this.getAllProducts();
+          this.products$ = this.getAllProducts();
         }
       })
-    console.log("product ", product);
   }
 
-  deleteProduct(id: string) { // should be a number
+  deleteProduct(id: number) { // should be a number
     this.http.deleteProduct(id)
       .subscribe({
         next: (res) => {
-          alert("delete sucsses");
-          this.getAllProducts();
-        },
+          alert("delete sucsses"); /**@todo: create pop Modal instead */
+          // this.dialog.open(ServerMassageDialogComponent, { /**@todo: for the pop up... */
+          //   data: {
+          //     animal: 'panda',
+          //   },
+          // });
+          this.products$ = this.getAllProducts();         },
         error: (res) => {
-          alert("error while deleting");
+          alert("error while deleting"); /**@todo: create pop Modal instead */
         }
       })
   }
