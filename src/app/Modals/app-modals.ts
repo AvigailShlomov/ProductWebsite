@@ -26,3 +26,26 @@ export class Category{
 }
 
 export const API_URL="http://localhost:3000/productList/";
+
+// User-related constants
+export const PRODUCT_HEADLINE = {
+    PRODUCT_NAME: "productName",
+    CATEGORY: "category",
+    FRESHNESS: "freshness",
+    PRICE: "price",
+    DATE: "date",
+    COMMENT: "comment",
+    ACTIONS: "actions",
+  };
+  
+  // Error messages
+  export const GUI_MESSAGES = {
+    SUCCESS: "Success !!",
+    DATA_SAVED_SUCCESS: "Data has been successfully saved!",
+    DATA_DELETED_SUCCESS: "Product deleted Sucsesfuly",
+   
+    DATA_DELETED_FAIL: "Error while deleting product. Please try again later.",
+    DATA_RECEIVED_FAIL: "Error while fetching products. Please try again later.",
+    NOT_FOUND: "Resource not found.",
+    SERVER_ERROR: "Server Error !!",
+  };
