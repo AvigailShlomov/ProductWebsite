@@ -5,7 +5,7 @@ import { ApiService } from './services/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,9 +13,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ProductDialogComponent } from './Dialogs/product-dialog/product-dialog.component';
 import { MatInputModule } from '@angular/material/input';
-import { ServerMassageDialogComponent } from './Dialogs/server-massage-dialog/server-massage-dialog/server-massage-dialog.component';
 import { catchError, Observable, of } from 'rxjs';
-import { Product } from './Modals/app-modals';
+import { GUI_MESSAGES, Product, PRODUCT_HEADLINE } from './Modals/app-modals';
+import { NotificationDialogComponent } from './Dialogs/notification-dialog/notification-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -39,9 +39,15 @@ import { Product } from './Modals/app-modals';
   ]
 })
 export class AppComponent implements OnInit {
-  /**@todo: create constans for the column headlines */
-  displayedColumns: string[] = ['productName', 'category', 'freshness', 'price', 'date', 'comment', 'actions'];
-  
+  displayedColumns: string[] = [
+    PRODUCT_HEADLINE.PRODUCT_NAME,
+    PRODUCT_HEADLINE.CATEGORY,
+    PRODUCT_HEADLINE.FRESHNESS,
+    PRODUCT_HEADLINE.PRICE,
+    PRODUCT_HEADLINE.DATE,
+    PRODUCT_HEADLINE.COMMENT,
+    PRODUCT_HEADLINE.ACTIONS];
+
   //dataSource = new MatTableDataSource<Observable<Product[]>>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -72,7 +78,7 @@ export class AppComponent implements OnInit {
     }).afterClosed()
       .subscribe(val => {
         if (val == 'save') {
-          this.products$ = this.getAllProducts(); 
+          this.products$ = this.getAllProducts();
         }
       })
   }
@@ -81,15 +87,17 @@ export class AppComponent implements OnInit {
   getAllProducts() {
     return this.http.getProduct().pipe(
       catchError(err => {
-        alert("err while fetching products"); /**@todo: create pop Modal instead */
+        this.openNotificationDialog(GUI_MESSAGES.SERVER_ERROR,
+          GUI_MESSAGES.DATA_RECEIVED_FAIL);
+
         return of([]);
       })
     );
-/**@todo: take care of sort and v and del this */
+    /**@todo: take care of sort and v and del this */
     // this.http.getProduct() 
     //   .subscribe({
     //     next: (res) => {
-       //  this.dataSource = new MatTableDataSource(res);
+    //  this.dataSource = new MatTableDataSource(res);
     //       this.dataSource.paginator = this.paginator;
     //       this.dataSource.sort = this.sort;
     //     },
@@ -99,7 +107,7 @@ export class AppComponent implements OnInit {
     //   })
   }
 
-  editProduct(product: any) {
+  editProduct(product: Product) { 
     this.dialog.open(ProductDialogComponent, {
       width: '30%',
       data: product
@@ -111,20 +119,29 @@ export class AppComponent implements OnInit {
       })
   }
 
-  deleteProduct(id: number) { // should be a number
+  deleteProduct(id: number) { 
     this.http.deleteProduct(id)
       .subscribe({
         next: (res) => {
-          alert("delete sucsses"); /**@todo: create pop Modal instead */
-          // this.dialog.open(ServerMassageDialogComponent, { /**@todo: for the pop up... */
-          //   data: {
-          //     animal: 'panda',
-          //   },
-          // });
-          this.products$ = this.getAllProducts();         },
+          this.openNotificationDialog(GUI_MESSAGES.SUCCESS,
+            GUI_MESSAGES.DATA_DELETED_SUCCESS);
+          this.products$ = this.getAllProducts();
+        },
         error: (res) => {
-          alert("error while deleting"); /**@todo: create pop Modal instead */
+          this.openNotificationDialog(GUI_MESSAGES.SERVER_ERROR,
+            GUI_MESSAGES.DATA_DELETED_FAIL);
         }
       })
   }
+
+  openNotificationDialog(title: string, content: string) {
+    this.dialog.open(NotificationDialogComponent, {
+      width: '30%',
+      data: {
+        title: title,
+        content: content
+      },
+    });
+  }
+
 }
