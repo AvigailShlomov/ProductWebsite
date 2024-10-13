@@ -18,7 +18,7 @@ export class ApiService {
     return this.http.get<any>(API_URL)
   }
 
-  putProduct(data: any, id: string): Observable<any> {
+  putProduct(data: any, id: number): Observable<any> {
     return this.http.put<any>(API_URL + id, data)
   }
 

@@ -4,7 +4,7 @@ export interface DropDownStruct {
   }
 
 export interface Product {
-    id: string,
+    id: number,
     productName: string
     category: string,
     freshness: string,
