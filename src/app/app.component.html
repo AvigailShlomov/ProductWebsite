@@ -12,11 +12,11 @@
 
     <mat-form-field appe>
       <mat-label>Filter</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="filter" #input>
+      <input matInput (keyup)="applyFilter(input.value)" placeholder="filter" #input>
     </mat-form-field>
 
     <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="(products$ | async) || [] " matSort>
+      <table mat-table [dataSource]="(filteredProducts$ | async) || [] " matSort>
 
         <!-- Name Column -->
         <ng-container matColumnDef="productName">

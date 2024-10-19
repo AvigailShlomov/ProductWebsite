@@ -13,7 +13,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ProductDialogComponent } from './Dialogs/product-dialog/product-dialog.component';
 import { MatInputModule } from '@angular/material/input';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { GUI_MESSAGES, Product, PRODUCT_HEADLINE } from './Modals/app-modals';
 import { NotificationDialogComponent } from './Dialogs/notification-dialog/notification-dialog.component';
 
@@ -49,26 +49,51 @@ export class AppComponent implements OnInit {
     PRODUCT_HEADLINE.ACTIONS];
 
   //dataSource = new MatTableDataSource<Observable<Product[]>>();
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator; /**@todo: add pageinator */
+  @ViewChild(MatSort) sort!: MatSort;/**@todo: add sort */
   products$!: Observable<Product[]>;
+  filteredProducts$!: Observable<Product[]>;
 
   constructor(
     private dialog: MatDialog,
     private http: ApiService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.products$ = this.getAllProducts();
+    this.filteredProducts$ = this.products$;
   }
 
-  applyFilter(event: Event) {
-    // const filterValue = (event.target as HTMLInputElement).value;
-    // this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter(searchTerm: string) {
+    if (searchTerm == "") {
 
+      this.filteredProducts$ = this.products$
+    }
+    else if (searchTerm == " ") {
+
+      return;
+    }
+    else {
+      this.filteredProducts$ = this.products$.pipe(
+        map(products =>
+          products.filter(product =>
+            this.filterOnOneProduct(product, searchTerm)
+          )
+        )
+      )
+    }
     // if (this.dataSource.paginator) {
     //   this.dataSource.paginator.firstPage();
     // }
+  }
+
+  /**@todo: does not work for numbers! */
+  private filterOnOneProduct(product: Product, searchTerm: string): boolean {
+    const term = searchTerm.trim().toLowerCase();
+
+    return Object.values(product).some(value =>
+      typeof value === 'string' && value.toLowerCase().includes(term)
+    );
   }
 
   openDialog() {
@@ -84,7 +109,7 @@ export class AppComponent implements OnInit {
   }
 
 
-  getAllProducts() {
+  getAllProducts(): Observable<Product[]> {
     return this.http.getProduct().pipe(
       catchError(err => {
         this.openNotificationDialog(GUI_MESSAGES.SERVER_ERROR,
@@ -107,7 +132,7 @@ export class AppComponent implements OnInit {
     //   })
   }
 
-  editProduct(product: Product) { 
+  editProduct(product: Product) {
     this.dialog.open(ProductDialogComponent, {
       width: '30%',
       data: product
@@ -119,7 +144,7 @@ export class AppComponent implements OnInit {
       })
   }
 
-  deleteProduct(id: number) { 
+  deleteProduct(id: number) {
     this.http.deleteProduct(id)
       .subscribe({
         next: (res) => {
