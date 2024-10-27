@@ -27,7 +27,6 @@ export class Category{
 
 export const API_URL="http://localhost:3000/productList/";
 
-// User-related constants
 export const PRODUCT_HEADLINE = {
     PRODUCT_NAME: "productName",
     CATEGORY: "category",
@@ -38,7 +37,6 @@ export const PRODUCT_HEADLINE = {
     ACTIONS: "actions",
   };
   
-  // Error messages
   export const GUI_MESSAGES = {
     SUCCESS: "Success !!",
     DATA_SAVED_SUCCESS: "Data has been successfully saved!",
