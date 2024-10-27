@@ -64,7 +64,9 @@ export class AppComponent implements OnInit {
     this.filteredProducts$ = this.products$;
   }
 
-  applyFilter(searchTerm: string) {
+  filterAllProducts(searchTerm: string) {
+    console.log("serch term:", searchTerm);
+    
     if (searchTerm == "") {
 
       this.filteredProducts$ = this.products$
@@ -90,6 +92,7 @@ export class AppComponent implements OnInit {
   /**@todo: does not work for numbers! */
   private filterOnOneProduct(product: Product, searchTerm: string): boolean {
     const term = searchTerm.trim().toLowerCase();
+console.log(term);
 
     return Object.values(product).some(value =>
       typeof value === 'string' && value.toLowerCase().includes(term)
