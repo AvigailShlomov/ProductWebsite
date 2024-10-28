@@ -11,6 +11,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { NgFor } from '@angular/common';
+import { ShearedService } from 'src/app/services/sheared.service';
 
 @Component({
   selector: 'app-product-dialog',
@@ -49,8 +50,9 @@ export class ProductDialogComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private api: ApiService,
-    @Inject(MAT_DIALOG_DATA) public editData: Product,
-    private dialogRef: MatDialogRef<ProductDialogComponent>
+    private dialogRef: MatDialogRef<ProductDialogComponent>,
+    private shearedService: ShearedService,
+    @Inject(MAT_DIALOG_DATA) public editData: Product
   ) { }
 
   ngOnInit() {
@@ -66,17 +68,19 @@ export class ProductDialogComponent implements OnInit {
     }
   }
 
-
   addProduct() {
-
     if (!this.editData) {
+
       if (this.productForm.valid) {
+
         this.api.postProduct(this.productForm.value)
           .subscribe({
             next: ((res) => {
               this.productForm.reset();
-              this.dialogRef.close('save')
+              this.dialogRef.close('save');
               alert("Product added sucssesfuly");
+              this.shearedService.refreshProducts();
+
             }),
             error: () => {
               alert("Error while adding a new product")
@@ -94,8 +98,10 @@ export class ProductDialogComponent implements OnInit {
       .subscribe({
         next: ((res) => {
           this.productForm.reset();
-          this.dialogRef.close('update')
+          this.dialogRef.close('update');
           alert("Product updated sucssesfuly");
+          
+          this.shearedService.refreshProducts();
         }),
         error: () => {
           alert("Error while updating the product")
