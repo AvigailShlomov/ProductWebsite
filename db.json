@@ -3,20 +3,29 @@
     {
       "productName": "Apple Notebook",
       "category": "Electronics",
-      "freshness": "Reforbished",
+      "freshness": "Seconed Hand",
       "price": 7250,
       "comment": "works perfectly",
       "date": "2024-09-23T21:00:00.000Z",
       "id": "1"
     },
     {
-      "id": "f677",
       "productName": "Mango",
       "category": "Food",
-      "freshness": "Seconed Hand",
+      "freshness": "New",
       "price": 1000,
       "comment": "a one of a kind heart MANGO - 5 stars!!",
-      "date": "2024-09-24T21:00:00.000Z"
+      "date": "2024-09-24T21:00:00.000Z",
+      "id": "f677"
+    },
+    {
+      "productName": "airpods",
+      "category": "Electronics",
+      "freshness": "New",
+      "price": 322,
+      "comment": "good vibes",
+      "date": "2024-10-21T21:00:00.000Z",
+      "id": "413c"
     }
   ],
   "comments": [
