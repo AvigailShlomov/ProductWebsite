@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 import { Product, GUI_MESSAGES } from '../Modals/app-modals';
 import { ApiService } from './api.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,14 +12,17 @@ import { NotificationDialogComponent } from '../Dialogs/notification-dialog/noti
 export class ShearedService {
 
     products$!: Observable<Product[]>;
+    private filteredProductsSubject: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>([]);
+    filteredProducts$: Observable<Product[]> = this.filteredProductsSubject.asObservable();
 
     constructor(private http: ApiService,
         // private dialog: MatDialog
     ) { }
 
-    getAllProducts(): Observable<Product[]> {
-        return this.http.getProduct().pipe(
-            catchError(err => {
+    getAllProducts() {
+      return  this.http.getProduct().pipe(
+            tap((product) => this.filteredProductsSubject.next(product))
+            , catchError(err => {
                 // this.dialog.open(NotificationDialogComponent, {
                 //     width: '30%',
                 //     data: {
@@ -32,12 +35,23 @@ export class ShearedService {
 
                 return of([]);
             })
-        );
+        )
+            .subscribe()
+    }
+
+    updateFilteredProducts(products: Product[]) {
+        this.filteredProductsSubject.next(products);
+    }
+
+    filterProduct(){
 
     }
 
-    refreshProducts() { /**@todo: maybe rename this */
-        this.products$ = this.getAllProducts();
+    resetProducts() {
+        this.getAllProducts();
+        // this.products$ = this.getAllProducts();
+        // this.filteredProducts$ = this.getAllProducts();
+        // this.filteredProductsSubject.next(this.getAllProducts())
     }
     // openNotificationDialog(dialog: MatDialog, title: string, content: string) {
     //     dialog.open(NotificationDialogComponent, {
