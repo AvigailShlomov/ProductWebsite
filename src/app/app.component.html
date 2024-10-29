@@ -1,11 +1,4 @@
-<mat-toolbar>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-    <mat-icon>supervised_user_circle</mat-icon>
-  </button>
-  <span>Products Website</span>
-  <span class="example-spacer"></span>
-  <button mat-raised-button color="warn" (click)="openDialog()">Add Product</button>
-</mat-toolbar>
+<app-header></app-header>
 
 <div class="container">
   <div style="margin-top: 10px;">
@@ -16,7 +9,7 @@
     </mat-form-field>
 
     <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="(filteredProducts$ | async) || [] " matSort>
+      <table mat-table [dataSource]="filteredProducts || [] " matSort>
 
         <!-- Name Column -->
         <ng-container matColumnDef="productName">
