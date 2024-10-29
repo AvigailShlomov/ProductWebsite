@@ -17,6 +17,7 @@ import { map, Observable } from 'rxjs';
 import { GUI_MESSAGES, Product, PRODUCT_HEADLINE } from './Modals/app-modals';
 import { NotificationDialogComponent } from './Dialogs/notification-dialog/notification-dialog.component';
 import { ShearedService } from './services/sheared.service';
+import { HeaderComponent } from './header/header.component';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ import { ShearedService } from './services/sheared.service';
   standalone: true,
   imports: [
     ProductDialogComponent,
+    HeaderComponent,
     ReactiveFormsModule,
     CommonModule,
     MatFormFieldModule,
@@ -53,6 +55,7 @@ export class AppComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator; /**@todo: add pageinator */
   @ViewChild(MatSort) sort!: MatSort;/**@todo: add sort */
   filteredProducts$!: Observable<Product[]>;
+  filteredProducts: Product[] = [];
 
   constructor(
     private dialog: MatDialog,
@@ -61,14 +64,17 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.shearedService.refreshProducts();
-    this.filteredProducts$ = this.shearedService.products$;
+    this.shearedService.resetProducts();
+
+    this.shearedService.filteredProducts$.subscribe((products) => {
+      this.filteredProducts = products;
+    });
   }
 
   filterAllProducts(searchTerm: string) {
     if (searchTerm == "") {
 
-      this.filteredProducts$ = this.shearedService.products$;
+      this.shearedService.resetProducts();
     }
     else if (searchTerm == " ") {
 
@@ -98,19 +104,6 @@ export class AppComponent implements OnInit {
     );
   }
 
-  openDialog() {
-    this.dialog.open(ProductDialogComponent, {
-      width: '30%',
-      height: '85%'
-    }).afterClosed()
-      .subscribe(val => {
-        if (val == 'save') {
-          this.shearedService.refreshProducts();
-          this.filteredProducts$ = this.shearedService.products$;
-        }
-      })
-  }
-
   editProduct(product: Product) {
     this.dialog.open(ProductDialogComponent, {
       width: '30%',
@@ -120,8 +113,8 @@ export class AppComponent implements OnInit {
         if (val == 'update') {
           console.log("PRESS UPDATE BTN");
 
-          this.shearedService.refreshProducts();
-          this.filteredProducts$ = this.shearedService.products$;
+          this.shearedService.resetProducts();
+
         }
       })
   }
@@ -132,8 +125,7 @@ export class AppComponent implements OnInit {
         next: (res) => {
           this.openNotificationDialog(GUI_MESSAGES.SUCCESS,
             GUI_MESSAGES.DATA_DELETED_SUCCESS);
-          this.shearedService.refreshProducts();
-          this.filteredProducts$ = this.shearedService.products$;
+          this.shearedService.resetProducts();
         },
         error: (res) => {
           this.openNotificationDialog(GUI_MESSAGES.SERVER_ERROR,
