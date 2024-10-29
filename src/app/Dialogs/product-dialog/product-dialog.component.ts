@@ -79,8 +79,7 @@ export class ProductDialogComponent implements OnInit {
               this.productForm.reset();
               this.dialogRef.close('save');
               alert("Product added sucssesfuly");
-              this.shearedService.refreshProducts();
-
+              this.shearedService.resetProducts();
             }),
             error: () => {
               alert("Error while adding a new product")
@@ -101,7 +100,7 @@ export class ProductDialogComponent implements OnInit {
           this.dialogRef.close('update');
           alert("Product updated sucssesfuly");
           
-          this.shearedService.refreshProducts();
+          this.shearedService.resetProducts();
         }),
         error: () => {
           alert("Error while updating the product")
