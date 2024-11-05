@@ -5,7 +5,7 @@ import { ApiService } from './services/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -51,11 +51,11 @@ export class AppComponent implements OnInit {
     PRODUCT_HEADLINE.COMMENT,
     PRODUCT_HEADLINE.ACTIONS];
 
-  //dataSource = new MatTableDataSource<Observable<Product[]>>();
-  @ViewChild(MatPaginator) paginator!: MatPaginator; /**@todo: add pageinator */
+    dataSource: MatTableDataSource<Product> = new MatTableDataSource();
+      @ViewChild(MatPaginator) paginator!: MatPaginator; /**@todo: add pageinator */
   @ViewChild(MatSort) sort!: MatSort;/**@todo: add sort */
-  filteredProducts$!: Observable<Product[]>;
-  filteredProducts: Product[] = [];
+   filteredProducts$!: Observable<Product[]>;
+  // filteredProducts: Product[] = [];
 
   constructor(
     private dialog: MatDialog,
@@ -66,12 +66,20 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.shearedService.resetProducts();
 
-    this.shearedService.filteredProducts$.subscribe((products) => {
-      this.filteredProducts = products;
+    this.shearedService.filteredProducts$.subscribe((products: Product[]) => {
+      this.dataSource.data = products;
     });
   }
 
+  ngAfterViewInit() {
+    // Bind the paginator and sort to the MatTableDataSource
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+ 
   filterAllProducts(searchTerm: string) {
+    console.log("IN FILTER!!!!!!!!!");
+    
     if (searchTerm == "") {
 
       this.shearedService.resetProducts();
@@ -81,6 +89,7 @@ export class AppComponent implements OnInit {
       return;
     }
     else {
+      /**@todo: bug with the map func */
       this.filteredProducts$ = this.shearedService.products$.pipe(
         map(products =>
           products.filter(product =>
@@ -89,9 +98,9 @@ export class AppComponent implements OnInit {
         )
       )
     }
-    // if (this.dataSource.paginator) {
-    //   this.dataSource.paginator.firstPage();
-    // }
+   // if (this.dataSource.paginator) {
+//         this.dataSource.paginator.firstPage();
+//     }
   }
 
   /**@todo: does not work for numbers! */
