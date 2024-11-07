@@ -45,9 +45,6 @@ export class ShearedService {
 
     resetProducts() {
         this.getAllProducts();
-        // this.products$ = this.getAllProducts();
-        // this.filteredProducts$ = this.getAllProducts();
-        // this.filteredProductsSubject.next(this.getAllProducts())
     }
     // openNotificationDialog(dialog: MatDialog, title: string, content: string) {
     //     dialog.open(NotificationDialogComponent, {
