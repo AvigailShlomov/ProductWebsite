@@ -43,10 +43,6 @@ export class ShearedService {
         this.filteredProductsSubject.next(products);
     }
 
-    filterProduct(){
-
-    }
-
     resetProducts() {
         this.getAllProducts();
         // this.products$ = this.getAllProducts();
