@@ -51,11 +51,10 @@ export class AppComponent implements OnInit {
     PRODUCT_HEADLINE.COMMENT,
     PRODUCT_HEADLINE.ACTIONS];
 
-    dataSource: MatTableDataSource<Product> = new MatTableDataSource();
-      @ViewChild(MatPaginator) paginator!: MatPaginator; /**@todo: add pageinator */
-  @ViewChild(MatSort) sort!: MatSort;/**@todo: add sort */
-   filteredProducts$!: Observable<Product[]>;
-  // filteredProducts: Product[] = [];
+  dataSource: MatTableDataSource<Product> = new MatTableDataSource();
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  filteredProducts$!: Observable<Product[]>;
 
   constructor(
     private dialog: MatDialog,
@@ -76,41 +75,14 @@ export class AppComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
- 
-  filterAllProducts(searchTerm: string) {
-    console.log("IN FILTER!!!!!!!!!");
-    
-    if (searchTerm == "") {
 
-      this.shearedService.resetProducts();
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
-    else if (searchTerm == " ") {
-
-      return;
-    }
-    else {
-      /**@todo: bug with the map func */
-      this.filteredProducts$ = this.shearedService.products$.pipe(
-        map(products =>
-          products.filter(product =>
-            this.filterOnOneProduct(product, searchTerm)
-          )
-        )
-      )
-    }
-   // if (this.dataSource.paginator) {
-//         this.dataSource.paginator.firstPage();
-//     }
-  }
-
-  /**@todo: does not work for numbers! */
-  private filterOnOneProduct(product: Product, searchTerm: string): boolean {
-    const term = searchTerm.trim().toLowerCase();
-    console.log(term);
-
-    return Object.values(product).some(value =>
-      typeof value === 'string' && value.toLowerCase().includes(term)
-    );
   }
 
   editProduct(product: Product) {
